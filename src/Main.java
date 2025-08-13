@@ -4,11 +4,49 @@ public class Main {
 
         System.out.println("Поехали!");
 
+        TaskManager taskManager = new TaskManager();
+
+        Task task1 = new Task("задача 1", "задача №1");
+        taskManager.addTask(task1);
+        Task task2 = new Task("задача 2", "задача №2");
+        taskManager.addTask(task2);
+
+        Epic epic1 = new Epic("основная задача 1", "основная задача №1");
+        taskManager.addEpic(epic1);
+        SubTask subTask1_1 = new SubTask("подзадача 1.1","подзадача №1.1", epic1.getTaskId());
+        taskManager.addSubTask(subTask1_1);
+        SubTask subTask1_2 = new SubTask("подзадача 1.2","подзадача №1.2", epic1.getTaskId());
+        taskManager.addSubTask(subTask1_2);
+
+        Epic epic2 = new Epic("основная задача 2", "основная задача №2");
+        taskManager.addEpic(epic2);
+        SubTask subTask2_1 = new SubTask("подзадача 2.1","подзадача №2.1", epic2.getTaskId());
+        taskManager.addSubTask(subTask2_1);
 
 
+        System.out.println("Задачи: " + taskManager.getAllTasks());
+        System.out.println("Основные задачи: " + taskManager.getAllEpics());
+        System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
 
+        task1.setTaskStatus(TaskStatus.IN_PROGRESS);
+        task2.setTaskStatus(TaskStatus.DONE);
 
+        subTask1_1.setTaskStatus(TaskStatus.IN_PROGRESS);
+        subTask1_2.setTaskStatus(TaskStatus.DONE);
+        taskManager.updateEpic(epic1);
 
+        subTask2_1.setTaskStatus(TaskStatus.DONE);
+        taskManager.updateEpic(epic2);
 
+        System.out.println("Задачи: " + taskManager.getAllTasks());
+        System.out.println("Основные задачи: " + taskManager.getAllEpics());
+        System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
+
+        taskManager.deleteTask(task1.getTaskId());
+        taskManager.deleteEpic(epic1.getTaskId());
+
+        System.out.println("Задачи: " + taskManager.getAllTasks());
+        System.out.println("Основные задачи: " + taskManager.getAllEpics());
+        System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
     }
 }

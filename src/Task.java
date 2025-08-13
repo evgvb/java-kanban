@@ -1,13 +1,22 @@
-public class Task {
-    private String taskName;
-    private String taskDescription;
-    private TaskStatus taskStatus;
-    private int taskId;
+import java.util.Objects;
 
-    public Task(String taskName, String taskDescription, TaskStatus taskStatus, int taskId) {
+class Task {
+    private int taskId;
+    private String taskName;
+    private TaskStatus taskStatus;
+    private String taskDescription;
+
+    public Task(String taskName, String taskDescription) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
-        this.taskStatus = taskStatus;
+        this.taskStatus = TaskStatus.NEW;
+    }
+
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int taskId) {
         this.taskId = taskId;
     }
 
@@ -35,38 +44,21 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public int getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
-
-    }
-
     @Override
-    public String toString() {
-        return "id: " + taskId + ", name: " + taskName + ", status: " + taskStatus;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        return this.taskId == ((Task) obj).taskId;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Task task = (Task) object;
+        return taskId == task.taskId;
     }
 
     @Override
     public int hashCode() {
-        return taskId;
+        return Objects.hash(taskId);
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "Task id=" + taskId + " name='" + taskName + " status=" + taskStatus;
+    }
 }
-
