@@ -1,7 +1,7 @@
 import java.util.*;
 
 class TaskManager {
-    private int newId = 0;
+    private int newId = 1;
 
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
@@ -110,11 +110,13 @@ class TaskManager {
 
         SubTask tmpSubTask = subTasks.get(subTask.getTaskId());
 
-        tmpSubTask.setTaskName(subTask.getTaskName());
-        tmpSubTask.setTaskDescription(subTask.getTaskDescription());
-        tmpSubTask.setTaskStatus(subTask.getTaskStatus());
+        if (tmpSubTask.getEpicId() == subTask.getEpicId()) {
+            tmpSubTask.setTaskName(subTask.getTaskName());
+            tmpSubTask.setTaskDescription(subTask.getTaskDescription());
+            tmpSubTask.setTaskStatus(subTask.getTaskStatus());
 
-        updateEpicStatus(subTask.getEpicId());
+            updateEpicStatus(subTask.getEpicId());
+        }
     }
 
     public void deleteSubTask(int id) {

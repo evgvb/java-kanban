@@ -32,11 +32,12 @@ public class Main {
         task2.setTaskStatus(TaskStatus.DONE);
 
         subTask1_1.setTaskStatus(TaskStatus.IN_PROGRESS);
+        taskManager.updateSubTask(subTask1_1);
         subTask1_2.setTaskStatus(TaskStatus.DONE);
-        taskManager.updateEpic(epic1);
+        taskManager.updateSubTask(subTask1_2);
 
         subTask2_1.setTaskStatus(TaskStatus.DONE);
-        taskManager.updateEpic(epic2);
+        taskManager.updateSubTask(subTask2_1);
 
         System.out.println("Задачи: " + taskManager.getAllTasks());
         System.out.println("Основные задачи: " + taskManager.getAllEpics());
