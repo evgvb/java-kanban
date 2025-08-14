@@ -1,15 +1,15 @@
 import java.util.Objects;
 
 class Task {
-    private int taskId;
-    private String taskName;
-    private TaskStatus taskStatus;
-    private String taskDescription;
+    protected int taskId;
+    protected String taskName;
+    protected TaskStatus taskStatus;
+    protected String taskDescription;
 
-    public Task(String taskName, String taskDescription) {
+    public Task(String taskName, String taskDescription, TaskStatus taskStatus) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
-        this.taskStatus = TaskStatus.NEW;
+        this.taskStatus = taskStatus;
     }
 
     public int getTaskId() {

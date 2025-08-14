@@ -6,21 +6,21 @@ public class Main {
 
         TaskManager taskManager = new TaskManager();
 
-        Task task1 = new Task("задача 1", "задача №1");
+        Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
         taskManager.addTask(task1);
-        Task task2 = new Task("задача 2", "задача №2");
+        Task task2 = new Task("задача 2", "задача №2", TaskStatus.NEW);
         taskManager.addTask(task2);
 
         Epic epic1 = new Epic("основная задача 1", "основная задача №1");
         taskManager.addEpic(epic1);
-        SubTask subTask1_1 = new SubTask("подзадача 1.1","подзадача №1.1", epic1.getTaskId());
+        SubTask subTask1_1 = new SubTask("подзадача 1.1","подзадача №1.1", TaskStatus.NEW, epic1.getTaskId());
         taskManager.addSubTask(subTask1_1);
-        SubTask subTask1_2 = new SubTask("подзадача 1.2","подзадача №1.2", epic1.getTaskId());
+        SubTask subTask1_2 = new SubTask("подзадача 1.2","подзадача №1.2", TaskStatus.NEW, epic1.getTaskId());
         taskManager.addSubTask(subTask1_2);
 
         Epic epic2 = new Epic("основная задача 2", "основная задача №2");
         taskManager.addEpic(epic2);
-        SubTask subTask2_1 = new SubTask("подзадача 2.1","подзадача №2.1", epic2.getTaskId());
+        SubTask subTask2_1 = new SubTask("подзадача 2.1","подзадача №2.1", TaskStatus.NEW, epic2.getTaskId());
         taskManager.addSubTask(subTask2_1);
 
 

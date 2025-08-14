@@ -1,11 +1,11 @@
 import java.util.*;
 
 class TaskManager {
-    private int newId = 1;
+    private int newId = 0;
 
     private Map<Integer, Task> tasks = new HashMap<>();
-    private static Map<Integer, Epic> epics = new HashMap<>();
-    private static Map<Integer, SubTask> subTasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, SubTask> subTasks = new HashMap<>();
 
     private int genId() {
         return newId++;
@@ -63,7 +63,6 @@ class TaskManager {
             Epic tmpEpic = epics.get(epic.getTaskId());
             tmpEpic.setTaskName(epic.getTaskName());
             tmpEpic.setTaskDescription(epic.getTaskDescription());
-            updateEpicStatus(epic.getTaskId());
         }
     }
 
@@ -104,33 +103,18 @@ class TaskManager {
         return subTasks.get(id);
     }
 
-    public static void updateSubTask(SubTask subTask) {
+    public void updateSubTask(SubTask subTask) {
         if (!subTasks.containsKey(subTask.getTaskId())) {
             throw new IllegalArgumentException("Нет подзадач!");
         }
 
         SubTask tmpSubTask = subTasks.get(subTask.getTaskId());
-        int oldEpicId = tmpSubTask.getEpicId();
-        int newEpicId = subTask.getEpicId();
-
-        if (oldEpicId != newEpicId) {
-            if (!epics.containsKey(newEpicId)) {
-                throw new IllegalArgumentException("Нет основной задачи!");
-            }
-
-            epics.get(oldEpicId).removeSubTaskId(subTask.getTaskId());
-            epics.get(newEpicId).addSubTaskId(subTask.getTaskId());
-            tmpSubTask.setEpicId(newEpicId);
-        }
 
         tmpSubTask.setTaskName(subTask.getTaskName());
         tmpSubTask.setTaskDescription(subTask.getTaskDescription());
         tmpSubTask.setTaskStatus(subTask.getTaskStatus());
 
-        updateEpicStatus(newEpicId);
-        if (oldEpicId != newEpicId) {
-            updateEpicStatus(oldEpicId);
-        }
+        updateEpicStatus(subTask.getEpicId());
     }
 
     public void deleteSubTask(int id) {
@@ -158,7 +142,7 @@ class TaskManager {
         return result;
     }
 
-    private static void updateEpicStatus(int epicId) {
+    private void updateEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic.getSubTaskIds().isEmpty()) {
             epic.setTaskStatus(TaskStatus.NEW);
