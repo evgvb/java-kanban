@@ -4,8 +4,11 @@ public class Main {
 
         System.out.println("Поехали!");
 
-        TaskManager taskManager = new TaskManager();
+        //TaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
+        //создание
+        System.out.println("* Тестирование создания:");
         Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
         taskManager.addTask(task1);
         Task task2 = new Task("задача 2", "задача №2", TaskStatus.NEW);
@@ -28,6 +31,8 @@ public class Main {
         System.out.println("Основные задачи: " + taskManager.getAllEpics());
         System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
 
+        //статус
+        System.out.println("* Тестирование изменения статуса:");
         task1.setTaskStatus(TaskStatus.IN_PROGRESS);
         task2.setTaskStatus(TaskStatus.DONE);
 
@@ -43,11 +48,23 @@ public class Main {
         System.out.println("Основные задачи: " + taskManager.getAllEpics());
         System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
 
+        //удаление
+        System.out.println("* Тестирование удаления:");
         taskManager.deleteTask(task1.getTaskId());
         taskManager.deleteEpic(epic1.getTaskId());
 
         System.out.println("Задачи: " + taskManager.getAllTasks());
         System.out.println("Основные задачи: " + taskManager.getAllEpics());
         System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
+
+        //история просмотров
+        System.out.println("* Тестирование истории:");
+        taskManager.getTask(task2.getTaskId());
+        taskManager.getEpic(epic1.getTaskId()); //удалена в истории не отобразится
+        taskManager.getEpic(epic2.getTaskId());
+        taskManager.getSubTask(subTask2_1.getTaskId());
+
+        System.out.println("История: " + taskManager.getHistory());
+
     }
 }
