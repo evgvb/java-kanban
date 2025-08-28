@@ -3,13 +3,21 @@ import java.util.Objects;
 class Task {
     protected int taskId;
     protected String taskName;
-    protected TaskStatus taskStatus;
     protected String taskDescription;
+    protected TaskStatus taskStatus;
 
     public Task(String taskName, String taskDescription, TaskStatus taskStatus) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.taskStatus = taskStatus;
+    }
+
+    public Task(int taskId, String taskName, String taskDescription, TaskStatus taskStatus) {
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStatus = taskStatus;
+
     }
 
     public int getTaskId() {
@@ -42,6 +50,10 @@ class Task {
 
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    public Task copyTask() {
+        return new Task( this.taskId, this.taskName, this.taskDescription, this.taskStatus);
     }
 
     @Override

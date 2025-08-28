@@ -6,30 +6,44 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, SubTask> subTasks = new HashMap<>();
+    private final HistoryManager historyManager;
 
-    private final LinkedList<Task> history = new LinkedList<>();
-    private static final int MAX_HISTORY_SIZE = 10;
+    public InMemoryTaskManager() {
+        this.historyManager = Managers.getDefaultHistory();
+    }
+
+    @Override
+    public LinkedList<Task> getHistory() {
+        return (LinkedList<Task>) historyManager.getHistory();
+    }
 
     private int genId() {
         return newId++;
     }
 
-    private void addToHistory(Task task) {
-        if (history.size() >= MAX_HISTORY_SIZE) {
-            history.removeFirst();
+    public boolean findById(int id) {
+        if (tasks.containsKey(id)) {
+            return true;
         }
-        history.add(task);
+        if (epics.containsKey(id)) {
+            return true;
+        }
+        if (subTasks.containsKey(id)) {
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public LinkedList<Task> getHistory() {
-        return new LinkedList<>(history);
-    }
-
-    // Методы для Task
+    //Task
     @Override
     public Task addTask(Task task) {
-        task.setTaskId(genId());
+        if (task.getTaskId() < 1) {
+            task.setTaskId(genId());
+        }
+        if (findById(task.getTaskId())) {
+            task.setTaskId(genId());
+        }
+
         tasks.put(task.getTaskId(), task);
         return task;
     }
@@ -48,16 +62,18 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(int id) {
         Task task = tasks.get(id);
         if (task != null) {
-            addToHistory(task);
+            historyManager.add(task);
         }
         return task;
     }
 
     @Override
-    public void updateTask(Task task) {
-        if (tasks.containsKey(task.getTaskId())) {
-            tasks.put(task.getTaskId(), task);
+    public Task updateTask(Task task) {
+        if (task == null || !tasks.containsKey(task.getTaskId())) {
+            return null;
         }
+        tasks.put(task.getTaskId(), task);
+        return task;
     }
 
     @Override
@@ -65,9 +81,12 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.remove(id);
     }
 
-    // Методы для Epic
+    //Epic
     @Override
     public Epic addEpic(Epic epic) {
+        if (epic == null) {
+            return null;
+        }
         epic.setTaskId(genId());
         epics.put(epic.getTaskId(), epic);
         return epic;
@@ -88,18 +107,21 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpic(int id) {
         Epic epic = epics.get(id);
         if (epic != null) {
-            addToHistory(epic);
+            historyManager.add(epic);
         }
         return epic;
     }
 
     @Override
-    public void updateEpic(Epic epic) {
-        if (epics.containsKey(epic.getTaskId())) {
-            Epic tmpEpic = epics.get(epic.getTaskId());
-            tmpEpic.setTaskName(epic.getTaskName());
-            tmpEpic.setTaskDescription(epic.getTaskDescription());
+    public Epic updateEpic(Epic epic) {
+        if (epic == null || !epics.containsKey(epic.getTaskId())) {
+            return null;
         }
+        Epic existingEpic = epics.get(epic.getTaskId());
+        existingEpic.setTaskName(epic.getTaskName());
+        existingEpic.setTaskDescription(epic.getTaskDescription());
+        updateEpicStatus(existingEpic.getTaskId());
+        return existingEpic;
     }
 
     @Override
@@ -112,17 +134,27 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // Методы для SubTask
+    //SubTask
     @Override
     public SubTask addSubTask(SubTask subTask) {
         if (!epics.containsKey(subTask.getEpicId())) {
             throw new IllegalArgumentException("Нет основной задачи!");
         }
+        if (subTask.getTaskId() < 1) {
+            subTask.setTaskId(genId());
+        }
+        if (subTask.getTaskId() == subTask.getEpicId()) {
+            throw new IllegalArgumentException("EpicId = SubTaskId!");
+        }
 
-        subTask.setTaskId(genId());
         subTasks.put(subTask.getTaskId(), subTask);
-        epics.get(subTask.getEpicId()).addSubTaskId(subTask.getTaskId());
-        updateEpicStatus(subTask.getEpicId());
+
+        Epic epic = epics.get(subTask.getEpicId());
+        if (epic != null) {
+            epic.addSubTaskId(subTask.getTaskId());
+            updateEpicStatus(epic.getTaskId());
+        }
+
         return subTask;
     }
 
@@ -144,26 +176,25 @@ public class InMemoryTaskManager implements TaskManager {
     public SubTask getSubTask(int id) {
         SubTask subTask = subTasks.get(id);
         if (subTask != null) {
-            addToHistory(subTask);
+            historyManager.add(subTask);
         }
         return subTask;
     }
 
     @Override
-    public void updateSubTask(SubTask subTask) {
-        if (!subTasks.containsKey(subTask.getTaskId())) {
-            throw new IllegalArgumentException("Нет подзадач!");
+    public SubTask updateSubTask(SubTask subTask) {
+        if (subTask == null || !subTasks.containsKey(subTask.getTaskId())) {
+            return null;
         }
 
-        SubTask tmpSubTask = subTasks.get(subTask.getTaskId());
-
-        if (tmpSubTask.getEpicId() == subTask.getEpicId()) {
-            tmpSubTask.setTaskName(subTask.getTaskName());
-            tmpSubTask.setTaskDescription(subTask.getTaskDescription());
-            tmpSubTask.setTaskStatus(subTask.getTaskStatus());
-
-            updateEpicStatus(subTask.getEpicId());
+        int epicId = subTask.getEpicId();
+        if (!epics.containsKey(epicId)) {
+            return null;
         }
+
+        subTasks.put(subTask.getTaskId(), subTask);
+        updateEpicStatus(epicId);
+        return subTask;
     }
 
     @Override

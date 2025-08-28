@@ -4,7 +4,6 @@ public class Main {
 
         System.out.println("Поехали!");
 
-        //TaskManager taskManager = new InMemoryTaskManager();
         TaskManager taskManager = Managers.getDefault();
 
         //создание
@@ -60,7 +59,7 @@ public class Main {
         //история просмотров
         System.out.println("* Тестирование истории:");
         taskManager.getTask(task2.getTaskId());
-        taskManager.getEpic(epic1.getTaskId()); //удалена в истории не отобразится
+        taskManager.getEpic(epic1.getTaskId()); //удалена, в истории не отобразится
         taskManager.getEpic(epic2.getTaskId());
         taskManager.getSubTask(subTask2_1.getTaskId());
 

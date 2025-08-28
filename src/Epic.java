@@ -8,12 +8,19 @@ class Epic extends Task {
         this.subTaskIds = new ArrayList<>();
     }
 
+    public Epic(int taskId, String taskName, String taskDescription, TaskStatus taskStatus, ArrayList<Integer> subTaskIds) {
+        super(taskId, taskName, taskDescription, taskStatus);
+        this.subTaskIds = subTaskIds;
+    }
+
     public ArrayList<Integer> getSubTaskIds() {
         return new ArrayList<>(subTaskIds);
     }
 
     public void addSubTaskId(int subTaskId) {
-        subTaskIds.add(subTaskId);
+        if (!subTaskIds.contains(subTaskId)) {
+            subTaskIds.add(subTaskId);
+        }
     }
 
     public void removeSubTaskId(int subTaskId) {
@@ -22,6 +29,11 @@ class Epic extends Task {
 
     public void clearSubTaskIds() {
         subTaskIds.clear();
+    }
+
+    @Override
+    public Epic copyTask() {
+        return new Epic(this.taskId, this.taskName, this.taskDescription, this.taskStatus, this.subTaskIds);
     }
 
     @Override
