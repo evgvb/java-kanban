@@ -1,4 +1,11 @@
 import org.junit.jupiter.api.Test;
+import service.HistoryManager;
+import service.Managers;
+import service.TaskManager;
+import task.Epic;
+import task.SubTask;
+import task.Task;
+import util.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +19,7 @@ class ManagersTest {
 
         //добавление задач
         Task task = new Task("задача 1", "задача №1", TaskStatus.NEW);
-        //Task addedTask = taskManager.addTask(task);
+        //task.Task addedTask = taskManager.addTask(task);
         taskManager.addTask(task);
         assertNotNull(task, "Задача = null");
         assertTrue(task.getTaskId() > 0, "Id задачи < 1");

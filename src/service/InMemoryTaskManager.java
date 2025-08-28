@@ -1,3 +1,10 @@
+package service;
+
+import task.Epic;
+import task.SubTask;
+import task.Task;
+import util.TaskStatus;
+
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -34,7 +41,7 @@ public class InMemoryTaskManager implements TaskManager {
         return false;
     }
 
-    //Task
+    //task.Task
     @Override
     public Task addTask(Task task) {
         if (task.getTaskId() < 1) {
@@ -81,7 +88,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.remove(id);
     }
 
-    //Epic
+    //task.Epic
     @Override
     public Epic addEpic(Epic epic) {
         if (epic == null) {
@@ -134,7 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    //SubTask
+    //task.SubTask
     @Override
     public SubTask addSubTask(SubTask subTask) {
         if (!epics.containsKey(subTask.getEpicId())) {

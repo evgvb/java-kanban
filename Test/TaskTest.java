@@ -1,5 +1,11 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.Managers;
+import service.TaskManager;
+import task.Epic;
+import task.SubTask;
+import task.Task;
+import util.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +19,7 @@ class TaskTest {
 
     @Test
     void testTaskEqualityById() {
-        //Проверка, что экземпляры класса Task равны друг другу, если равен их id
+        //Проверка, что экземпляры класса task.Task равны друг другу, если равен их id
         Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
         task1.setTaskId(1);
 
@@ -25,7 +31,7 @@ class TaskTest {
 
     @Test
     void testSubTaskEqualityById() {
-        //Проверка, что наследники класса Task равны друг другу, если равен их id
+        //Проверка, что наследники класса task.Task равны друг другу, если равен их id
         SubTask subTask1 = new SubTask("подзадача 1", "задача №1", TaskStatus.NEW, 1);
         subTask1.setTaskId(1);
 
@@ -48,7 +54,7 @@ class TaskTest {
 
     @Test
     void testEpicCannotAddToItself() {
-        //Проверка, что объект Epic нельзя добавить в самого себя в виде подзадачи
+        //Проверка, что объект task.Epic нельзя добавить в самого себя в виде подзадачи
         Epic epic = new Epic("основная задача 1", "основная задача №1");
         taskManager.addEpic(epic);
         int epicId = epic.getTaskId();

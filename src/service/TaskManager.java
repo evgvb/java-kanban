@@ -1,8 +1,14 @@
+package service;
+
+import task.Epic;
+import task.SubTask;
+import task.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    //Task
+    //task.Task
     Task addTask(Task task);
     ArrayList<Task> getAllTasks();
     void deleteAllTasks();
@@ -10,7 +16,7 @@ public interface TaskManager {
     Task updateTask(Task task);
     void deleteTask(int id);
 
-    //Epic
+    //task.Epic
     Epic addEpic(Epic epic);
     List<Epic> getAllEpics();
     void deleteAllEpics();
@@ -18,7 +24,7 @@ public interface TaskManager {
     Epic updateEpic(Epic epic);
     void deleteEpic(int id);
 
-    //SubTask
+    //task.SubTask
     SubTask addSubTask(SubTask subTask);
     List<SubTask> getAllSubTasks();
     void deleteAllSubTasks();

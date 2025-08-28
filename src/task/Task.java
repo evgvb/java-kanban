@@ -1,6 +1,10 @@
+package task;
+
+import util.TaskStatus;
+
 import java.util.Objects;
 
-class Task {
+public class Task {
     protected int taskId;
     protected String taskName;
     protected String taskDescription;
@@ -71,6 +75,6 @@ class Task {
 
     @Override
     public String toString() {
-        return "Task id=" + taskId + " name='" + taskName + "' status='" + taskStatus + "'";
+        return "task.Task id=" + taskId + " name='" + taskName + "' status='" + taskStatus + "'";
     }
 }

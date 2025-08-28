@@ -1,5 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.HistoryManager;
+import service.InMemoryHistoryManager;
+import task.Task;
+import util.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
