@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public interface TaskManager {
     //Task
@@ -12,7 +12,7 @@ public interface TaskManager {
 
     //Epic
     Epic addEpic(Epic epic);
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
     void deleteAllEpics();
     Epic getEpic(int id);
     Epic updateEpic(Epic epic);
@@ -20,14 +20,14 @@ public interface TaskManager {
 
     //SubTask
     SubTask addSubTask(SubTask subTask);
-    ArrayList<SubTask> getAllSubTasks();
+    List<SubTask> getAllSubTasks();
     void deleteAllSubTasks();
     SubTask getSubTask(int id);
     SubTask updateSubTask(SubTask subTask);
     void deleteSubTask(int id);
-    ArrayList<SubTask> getSubTasksByEpic(int epicId);
+    List<SubTask> getSubTasksByEpic(int epicId);
 
 
     //History
-    LinkedList<Task> getHistory();
+    List<Task> getHistory();
 }

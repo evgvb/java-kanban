@@ -21,7 +21,7 @@ public class InMemoryTaskManager implements TaskManager {
         return newId++;
     }
 
-    public boolean findById(int id) {
+    private boolean findById(int id) {
         if (tasks.containsKey(id)) {
             return true;
         }

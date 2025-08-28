@@ -5,11 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
     private TaskManager taskManager;
-    private HistoryManager historyManager;
 
     @BeforeEach
     void setUp() {
-        historyManager = Managers.getDefaultHistory();
         taskManager = Managers.getDefault();
     }
 
