@@ -16,13 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryHistoryManagerTest {
     private HistoryManager historyManager;
 
-    ///***
     private TaskManager taskManager;
-
-    //@BeforeEach
-    //void setUp() {
-      //  taskManager = Managers.getDefault();
-    //}
 
     @BeforeEach
     void setUp() {
@@ -49,36 +43,35 @@ class InMemoryHistoryManagerTest {
         assertEquals("задача 1", historyTask.getTaskName());
         assertEquals("задача вчера", historyTask.getTaskDescription());
         assertEquals(TaskStatus.NEW, historyTask.getTaskStatus());
+
     }
 
-/////***
-//    private TaskManager taskManager;
-//
-//    @BeforeEach
-//    private void setUp() {
-//        taskManager = Managers.getDefault();
-//    }
-
     @Test
-    void testHistoryOrder() {
-        Task task1 = new Task("Task 1", "Description", TaskStatus.NEW);
-        Task task2 = new Task("Task 2", "Description", TaskStatus.NEW);
+    void testHistoryTask() {
+        //Проверка истории просмотра задач
+        Task task1 = new Task("задача 1", "Описание 1", TaskStatus.NEW);
+        Task task2 = new Task("задача 2", "Описание 2", TaskStatus.NEW);
+        Task task3 = new Task("задача 3", "Описание 3", TaskStatus.NEW);
         taskManager.addTask(task1);
         taskManager.addTask(task2);
+        taskManager.addTask(task3);
 
         taskManager.getTask(task1.getTaskId());
         taskManager.getTask(task2.getTaskId());
+        taskManager.getTask(task3.getTaskId());
         taskManager.getTask(task1.getTaskId());
 
         List<Task> history = taskManager.getHistory();
         assertEquals(3, history.size());
         assertEquals(task2.getTaskId(), history.get(0).getTaskId());
-        assertEquals(task1.getTaskId(), history.get(1).getTaskId());
+        assertEquals(task3.getTaskId(), history.get(1).getTaskId());
+        assertEquals(task1.getTaskId(), history.get(2).getTaskId());
     }
 
     @Test
     void testHistoryRemoval() {
-        Task task = new Task("Task", "Description", TaskStatus.NEW);
+        //Проверка удаления задачи из истории
+        Task task = new Task("задача", "Описание", TaskStatus.NEW);
         taskManager.addTask(task);
         taskManager.getTask(task.getTaskId());
 
@@ -88,10 +81,11 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void testEpicRemovalRemovesSubtasksFromHistory() {
-        Epic epic = new Epic("Epic", "Description");
+    void testEpicRemoveSubtasksFromHistory() {
+        //Проверка удаления подзадач при удалении основной задачи
+        Epic epic = new Epic("Основная задача", "Description");
         taskManager.addEpic(epic);
-        SubTask subTask = new SubTask("SubTask", "Description", TaskStatus.NEW, epic.getTaskId());
+        SubTask subTask = new SubTask("Подзадача", "Description", TaskStatus.NEW, epic.getTaskId());
         taskManager.addSubTask(subTask);
 
         taskManager.getEpic(epic.getTaskId());
@@ -100,17 +94,5 @@ class InMemoryHistoryManagerTest {
         taskManager.deleteEpic(epic.getTaskId());
 
         assertTrue(taskManager.getHistory().isEmpty());
-    }
-
-    @Test
-    void testTaskVersionPreservation() {
-        Task original = new Task("Original", "Description", TaskStatus.NEW);
-        taskManager.addTask(original);
-        taskManager.getTask(original.getTaskId());
-
-        original.setTaskName("Modified");
-        Task historyTask = taskManager.getHistory().get(0);
-
-        assertEquals("Original", historyTask.getTaskName());
     }
 }

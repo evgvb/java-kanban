@@ -37,6 +37,7 @@ class InMemoryTaskManagerTest {
         assertEquals(addedEpic, taskManager.getEpic(addedEpic.getTaskId()));
         assertEquals(addedSubTask, taskManager.getSubTask(addedSubTask.getTaskId()));
     }
+
     @Test
     void testNoConflictBetweenManualAndGeneratedIds() {
         // Проверка, что задачи с заданным id и сгенерированным id не конфликтуют
@@ -76,10 +77,9 @@ class InMemoryTaskManagerTest {
         //Проверяем, что добавленная задача имеет те же значения полей
         assertEquals(originalName, addedTask.getTaskName(), "Различаются наименования!");
         assertEquals(originalDescription, addedTask.getTaskDescription(), "Различается описание!");
-        assertEquals(originalStatus, addedTask.getTaskStatus(),"Различается статус!");
+        assertEquals(originalStatus, addedTask.getTaskStatus(), "Различается статус!");
         //assertEquals(originalId, addedTask.getTaskId());  //если id задан вручную и окажется не уникальным, то будет изменен
     }
-
 
 
 }
