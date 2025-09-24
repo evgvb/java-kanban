@@ -57,7 +57,7 @@ public class Task {
     }
 
     public Task copyTask() {
-        return new Task( this.taskId, this.taskName, this.taskDescription, this.taskStatus);
+        return new Task(this.taskId, this.taskName, this.taskDescription, this.taskStatus);
     }
 
     @Override
