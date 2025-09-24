@@ -23,16 +23,15 @@ public class Main {
 
         Epic epic1 = new Epic("основная задача 1", "основная задача №1");
         taskManager.addEpic(epic1);
-        SubTask subTask1_1 = new SubTask("подзадача 1.1", "подзадача №1.1", TaskStatus.NEW, epic1.getTaskId());
-        taskManager.addSubTask(subTask1_1);
-        SubTask subTask1_2 = new SubTask("подзадача 1.2", "подзадача №1.2", TaskStatus.NEW, epic1.getTaskId());
-        taskManager.addSubTask(subTask1_2);
+        SubTask subTask1p1 = new SubTask("подзадача 1.1", "подзадача №1.1", TaskStatus.NEW, epic1.getTaskId());
+        taskManager.addSubTask(subTask1p1);
+        SubTask subTask1p2 = new SubTask("подзадача 1.2", "подзадача №1.2", TaskStatus.NEW, epic1.getTaskId());
+        taskManager.addSubTask(subTask1p2);
 
         Epic epic2 = new Epic("основная задача 2", "основная задача №2");
         taskManager.addEpic(epic2);
-        SubTask subTask2_1 = new SubTask("подзадача 2.1", "подзадача №2.1", TaskStatus.NEW, epic2.getTaskId());
-        taskManager.addSubTask(subTask2_1);
-
+        SubTask subTask2p1 = new SubTask("подзадача 2.1", "подзадача №2.1", TaskStatus.NEW, epic2.getTaskId());
+        taskManager.addSubTask(subTask2p1);
 
         System.out.println("Задачи: " + taskManager.getAllTasks());
         System.out.println("Основные задачи: " + taskManager.getAllEpics());
@@ -43,13 +42,13 @@ public class Main {
         task1.setTaskStatus(TaskStatus.IN_PROGRESS);
         task2.setTaskStatus(TaskStatus.DONE);
 
-        subTask1_1.setTaskStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateSubTask(subTask1_1);
-        subTask1_2.setTaskStatus(TaskStatus.DONE);
-        taskManager.updateSubTask(subTask1_2);
+        subTask1p1.setTaskStatus(TaskStatus.IN_PROGRESS);
+        taskManager.updateSubTask(subTask1p1);
+        subTask1p2.setTaskStatus(TaskStatus.DONE);
+        taskManager.updateSubTask(subTask1p2);
 
-        subTask2_1.setTaskStatus(TaskStatus.DONE);
-        taskManager.updateSubTask(subTask2_1);
+        subTask2p1.setTaskStatus(TaskStatus.DONE);
+        taskManager.updateSubTask(subTask2p1);
 
         System.out.println("Задачи: " + taskManager.getAllTasks());
         System.out.println("Основные задачи: " + taskManager.getAllEpics());
@@ -69,14 +68,13 @@ public class Main {
         taskManager.getTask(task2.getTaskId());
         taskManager.getEpic(epic1.getTaskId()); //удалена, в истории не отобразится
         taskManager.getEpic(epic2.getTaskId());
-        taskManager.getSubTask(subTask2_1.getTaskId());
+        taskManager.getSubTask(subTask2p1.getTaskId());
 
         System.out.println("История: " + taskManager.getHistory());
 
         //очистить историю
         taskManager.deleteAllTasks();
         taskManager.deleteAllEpics();
-
 
         //Дополнительное задание.
         //1. Создайте две задачи, эпик с тремя подзадачами и эпик без подзадач
