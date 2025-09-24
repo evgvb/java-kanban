@@ -32,10 +32,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean findById(int id) {
-        if (tasks.containsKey(id) || epics.containsKey(id) || subTasks.containsKey(id)) {
-            return true;
-        }
-        return false;
+        return tasks.containsKey(id) || epics.containsKey(id) || subTasks.containsKey(id);
     }
 
     //task.Task
