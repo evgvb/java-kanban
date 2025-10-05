@@ -1,0 +1,3 @@
+id,type,name,status,description,epic
+9,TASK,Задача доп 2,IN_PROGRESS,Описание доп задачи 2,
+14,EPIC,Основная доп задача без подзадач,NEW,доп эпик без подзадач,

@@ -10,9 +10,9 @@ import java.util.*;
 public class InMemoryTaskManager implements TaskManager {
     private int newId = 1;
 
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final Map<Integer, SubTask> subTasks = new HashMap<>();
+    final Map<Integer, Task> tasks = new HashMap<>();
+    final Map<Integer, Epic> epics = new HashMap<>();
+    final Map<Integer, SubTask> subTasks = new HashMap<>();
     private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
@@ -241,7 +241,7 @@ public class InMemoryTaskManager implements TaskManager {
         return (ArrayList) result;
     }
 
-    private void updateEpicStatus(int epicId) {
+    void updateEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic.getSubTaskIds().isEmpty()) {
             epic.setTaskStatus(TaskStatus.NEW);
