@@ -104,11 +104,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     manager.tasks.put(task.getTaskId(), task);
                 }
             }
-
         } catch (IOException exception) {
             throw new ManagerSaveException("Ошибка при загрузке из файла", exception);
         }
-
         return manager;
     }
 
