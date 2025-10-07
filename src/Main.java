@@ -6,6 +6,7 @@ import task.SubTask;
 import task.Task;
 import util.TaskStatus;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -140,5 +141,6 @@ public class Main {
         System.out.println("Эпики: " + taskManager.getAllEpics());
         System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
         System.out.println("История: " + taskManager.getHistory());
+
     }
 }
