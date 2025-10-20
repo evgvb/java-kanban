@@ -1,11 +1,11 @@
 import service.Managers;
 import service.TaskManager;
-
 import task.Epic;
 import task.SubTask;
 import task.Task;
 import util.TaskStatus;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Main {
 
@@ -15,7 +15,7 @@ public class Main {
 
         TaskManager taskManager = Managers.getDefault();
 
-        //создание
+/*        //создание
         System.out.println("* Тестирование создания:");
         Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
         taskManager.addTask(task1);
@@ -141,6 +141,109 @@ public class Main {
         System.out.println("Эпики: " + taskManager.getAllEpics());
         System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
         System.out.println("История: " + taskManager.getHistory());
+        */
 
+        LocalDateTime newTime = LocalDateTime.now().plusDays(1);
+
+        Task taskAdd1 = new Task("Задача доп 1", "Описание доп задачи 1", TaskStatus.NEW, newTime, Duration.ofMinutes(120));
+        taskManager.addTask(taskAdd1);
+
+        Task taskAdd2 = new Task("Задача доп 2", "Описание доп задачи 2", TaskStatus.IN_PROGRESS, newTime.plusHours(3), Duration.ofMinutes(90));
+        taskManager.addTask(taskAdd2);
+
+        Epic epicWithSubTasks = new Epic("Основная доп задача с подзадачами", "доп эпик с подзадачами");
+        taskManager.addEpic(epicWithSubTasks);
+
+        SubTask subTaskAdd1 = new SubTask("Подзадача доп 1", "Описание доп подзадачи 1", TaskStatus.NEW,
+                epicWithSubTasks.getTaskId(), newTime.plusHours(6), Duration.ofMinutes(60));
+        taskManager.addSubTask(subTaskAdd1);
+
+        SubTask subTaskAdd2 = new SubTask("Подзадача доп 2", "Описание доп подзадачи 2", TaskStatus.IN_PROGRESS,
+                epicWithSubTasks.getTaskId(), newTime.plusHours(7), Duration.ofMinutes(45));
+        taskManager.addSubTask(subTaskAdd2);
+
+        SubTask subTaskAdd3 = new SubTask("Подзадача доп 3", "Описание доп подзадачи 3", TaskStatus.DONE,
+                epicWithSubTasks.getTaskId(), newTime.plusHours(8), Duration.ofMinutes(75));
+        taskManager.addSubTask(subTaskAdd3);
+
+        Epic epicWithoutSubTasks = new Epic("Основная доп задача без подзадач", "доп эпик без подзадач");
+        taskManager.addEpic(epicWithoutSubTasks);
+
+        System.out.println("Дополнительное задание");
+        System.out.println("Задачи: " + taskManager.getAllTasks());
+        System.out.println("Основные задачи: " + taskManager.getAllEpics());
+        System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
+        System.out.println("Приоритетные задачи: " + taskManager.getPrioritizedTasks());
+        System.out.println("История: " + taskManager.getHistory());
+
+        // Тестирование полей эпика
+        System.out.println("* Расчетные поля эпика:");
+        System.out.println("Эпик с подзадачами - начало: " + epicWithSubTasks.getTaskStart());
+        System.out.println("Эпик с подзадачами - окончание: " + epicWithSubTasks.getTaskEnd());
+        System.out.println("Эпик с подзадачами - продолжительность: " +
+                epicWithSubTasks.getTaskDuration().toMinutes() + " минут");
+
+        //2. Запросите созданные задачи несколько раз в разном порядке
+        System.out.println("Запрос задач в разном порядке");
+
+        System.out.println("Вариант 1: задача 2 -> основная задача c подзадачами -> подзадача 1");
+        taskManager.getTask(taskAdd2.getTaskId());
+        taskManager.getEpic(epicWithSubTasks.getTaskId());
+        taskManager.getSubTask(subTaskAdd1.getTaskId());
+        System.out.println("История: " + taskManager.getHistory());
+
+        System.out.println("Вариант 2: подзадача 3 -> задача 1 -> основная задача без подзадач -> задача 2");
+        taskManager.getSubTask(subTaskAdd3.getTaskId());
+        taskManager.getTask(taskAdd1.getTaskId());
+        taskManager.getEpic(epicWithoutSubTasks.getTaskId());
+        taskManager.getTask(taskAdd2.getTaskId()); // задача2 уже была в истории
+        System.out.println("История: " + taskManager.getHistory());
+
+        System.out.println("Вариант 3: подзадача 2 -> основная задача с подзадачами -> задача 1");
+        taskManager.getSubTask(subTaskAdd2.getTaskId());
+        taskManager.getEpic(epicWithSubTasks.getTaskId()); // эпик1 уже был в истории
+        taskManager.getTask(taskAdd1.getTaskId()); // задача1 уже была в истории
+        System.out.println("История: " + taskManager.getHistory());
+
+        //4. Удалите задачу, которая есть в истории, и проверьте, что при печати она не будет выводиться.
+        System.out.println("Удалите задачу, которая есть в истории, и проверьте, что при печати она не будет выводиться");
+        System.out.println("Удаляем задачу1 (ID: " + taskAdd1.getTaskId() + ")");
+        taskManager.deleteTask(taskAdd1.getTaskId());
+        System.out.println("История после удаления задачи: " + taskManager.getHistory());
+        System.out.println("Приоритетные задачи после удаления: " + taskManager.getPrioritizedTasks());
+
+        //5. Удалите эпик с тремя подзадачами
+        System.out.println("Удаляем эпик с подзадачами (ID: " + epicWithSubTasks.getTaskId() + ")");
+        System.out.println("Подзадачи эпика: " + taskManager.getSubTasksByEpic(epicWithSubTasks.getTaskId()));
+        taskManager.deleteEpic(epicWithSubTasks.getTaskId());
+        System.out.println("История после удаления основной задачи: " + taskManager.getHistory());
+        System.out.println("Приоритетные задачи после удаления эпика: " + taskManager.getPrioritizedTasks());
+
+        System.out.println("Задачи: " + taskManager.getAllTasks());
+        System.out.println("Эпики: " + taskManager.getAllEpics());
+        System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
+        System.out.println("История: " + taskManager.getHistory());
+
+        //проверка пересечения времени
+        System.out.println("* Тестирование проверки пересечений:");
+        try {
+            Task overlappingTask = new Task("Пересекающаяся задача", "Описание", TaskStatus.NEW, newTime.plusHours(2), Duration.ofMinutes(70)); // Пересекается с taskAdd2
+            taskManager.addTask(overlappingTask);
+            System.out.println("Пересекающаяся задача была добавлена!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Пересекающаяся задача отклонена: " + e.getMessage());
+        }
+
+        // Тестирование задачи без времени начала
+        System.out.println("* Тестирование задачи без времени начала:");
+        Task noTimeTask = new Task("Задача без времени", "Описание", TaskStatus.NEW);
+        taskManager.addTask(noTimeTask);
+        System.out.println("Задача без времени начала добавлена: " + noTimeTask);
+        System.out.println("Приоритетные задачи (без задач без времени): " + taskManager.getPrioritizedTasks());
+
+        System.out.println("Задачи: " + taskManager.getAllTasks());
+        System.out.println("Эпики: " + taskManager.getAllEpics());
+        System.out.println("Подзадачи: " + taskManager.getAllSubTasks());
     }
+
 }

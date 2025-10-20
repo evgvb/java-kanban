@@ -5,9 +5,11 @@ import task.SubTask;
 import task.Task;
 import util.TaskStatus;
 import util.TaskType;
-
 import java.io.*;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -19,7 +21,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (FileWriter writer = new FileWriter(file)) {
-            writer.write("id,type,name,status,description,epic\n");
+            writer.write("id,type,name,description,status,start,duration,epic\n");
 
             for (Task task : getAllTasks()) {
                 writer.write(toString(task) + "\n");
@@ -48,12 +50,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             type = String.valueOf(TaskType.TASK);
         }
 
-        return String.format("%d,%s,%s,%s,%s,%s",
+        return String.format("%d,%s,%s,%s,%s,%s,%s,%s",
                 task.getTaskId(),
                 type,
                 task.getTaskName(),
-                task.getTaskStatus(),
                 task.getTaskDescription(),
+                task.getTaskStatus(),
+                task.getTaskStart() != null ? task.getTaskStart().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : "",
+                task.getTaskDuration() != null ? task.getTaskDuration().toMinutes() : 0,
                 epicId);
     }
 
@@ -62,18 +66,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         int id = Integer.parseInt(fields[0]);
         Enum<TaskType> type = TaskType.valueOf(fields[1]);
         String name = fields[2];
-        TaskStatus status = TaskStatus.valueOf(fields[3]);
-        String description = fields[4];
-        String epicId = fields.length > 5 ? fields[5] : "";
+        String description = fields[3];
+        TaskStatus status = TaskStatus.valueOf(fields[4]);
+        LocalDateTime start = fields[5].isEmpty() ? null : LocalDateTime.parse(fields[5], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        long durationMinutes = Long.parseLong(fields[6]);
+        Duration duration = durationMinutes == 0 ? null : Duration.ofMinutes(durationMinutes);
+        String epicId = fields.length > 7 ? fields[7] : "";
 
-        if ("TASK".equals(type)) {
-            return new Task(id, name, description, status);
-        } else if ("EPIC".equals(type)) {
-            Epic epic = new Epic(id, name, description, status, new ArrayList<>());
+
+        if ("TASK".equals(type.name())) {
+            return new Task(id, name, description, status,start,duration);
+        } else if ("EPIC".equals(type.name())) {
+            Epic epic = new Epic(id, name, description, status, new ArrayList<>(), start, duration);
             return epic;
-        } else if ("SUBTASK".equals(type)) {
+        } else if ("SUBTASK".equals(type.name())) {
             int parentEpicId = Integer.parseInt(epicId);
-            return new SubTask(id, name, description, status, parentEpicId);
+            return new SubTask(id, name, description, status, parentEpicId, start, duration);
         }
         throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
     }
