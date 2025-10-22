@@ -67,10 +67,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
-        tasks.values().forEach(this::removeFromPrioritizedTasks);
-        for (Integer id : tasks.keySet()) {
+        tasks.forEach((id, task) -> {
+            removeFromPrioritizedTasks(task);
             historyManager.remove(id);
-        }
+        });
+
         tasks.clear();
     }
 
@@ -130,13 +131,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
-        subTasks.values().forEach(this::removeFromPrioritizedTasks);
-        for (Integer id : subTasks.keySet()) {
+        subTasks.forEach((id, task) -> {
+            removeFromPrioritizedTasks(task);
             historyManager.remove(id);
-        }
-        for (Integer id : epics.keySet()) {
-            historyManager.remove(id);
-        }
+        });
+
+        epics.keySet().forEach(historyManager::remove);
+
         epics.clear();
         subTasks.clear();
     }
@@ -158,8 +159,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic existingEpic = epics.get(epic.getTaskId());
         existingEpic.setTaskName(epic.getTaskName());
         existingEpic.setTaskDescription(epic.getTaskDescription());
-        updateEpicStatus(existingEpic.getTaskId());
-        updateEpicFields(existingEpic.getTaskId());
+
         return existingEpic;
     }
 
@@ -216,16 +216,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllSubTasks() {
-        subTasks.values().forEach(this::removeFromPrioritizedTasks);
-        for (Integer id : subTasks.keySet()) {
+        subTasks.forEach((id, task) -> {
+            removeFromPrioritizedTasks(task);
             historyManager.remove(id);
-        }
+        });
+
         subTasks.clear();
-        for (Epic epic : epics.values()) {
+
+        epics.values().forEach(epic -> {
             epic.clearSubTaskIds();
             updateEpicStatus(epic.getTaskId());
             updateEpicFields(epic.getTaskId());
-        }
+        });
     }
 
     @Override

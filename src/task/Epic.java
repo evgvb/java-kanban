@@ -44,14 +44,12 @@ public class Epic extends Task {
         subTaskIds.clear();
     }
 
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    @Override
-    public void setTaskStart(LocalDateTime taskStart) {
-        super.setTaskStart(taskStart);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "task.Epic id = " + getTaskId() + " | name = '" + getTaskName() + "' | status = '" + getTaskStatus()
-                + "' | start = " + taskStart + " | duration = " + getTaskDuration().toMinutes() + " minutes | end = "
-                + getTaskEnd() + "' | subTasks=" + subTaskIds;
+                + "' | start = " + String.valueOf(taskStart) + " | duration = " + getTaskDuration().toMinutes()
+                + " minutes | end = " + String.valueOf(getEndTime()) + " | subTasks=" + subTaskIds;
     }
 }

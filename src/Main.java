@@ -237,7 +237,7 @@ public class Main {
         // Тестирование задачи без времени начала
         System.out.println("* Тестирование задачи без времени начала:");
         Task noTimeTask = new Task("Задача без времени", "Описание", TaskStatus.NEW);
-        taskManager.addTask(noTimeTask);
+        System.out.println(noTimeTask);
         System.out.println("Задача без времени начала добавлена: " + noTimeTask);
         System.out.println("Приоритетные задачи (без задач без времени): " + taskManager.getPrioritizedTasks());
 

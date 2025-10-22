@@ -94,12 +94,6 @@ public class Task {
         }
     }
 
-    public void setTaskEnd(LocalDateTime taskEnd) {
-        this.taskStart = taskEnd;
-    }
-
-
-
     public Task copyTask() {
         return new Task(this.taskId, this.taskName, this.taskDescription, this.taskStatus, this.taskStart, this.taskDuration);
     }
@@ -120,6 +114,7 @@ public class Task {
     @Override
     public String toString() {
         return "task.Task id = " + taskId + " | name = '" + taskName + "' | status = '" + taskStatus + "' | start = "
-                + taskStart + " | duration = " + getTaskDuration().toMinutes() + " minutes | end = " + getTaskEnd();
+                + String.valueOf(taskStart) + " | duration = " + getTaskDuration().toMinutes() + " minutes | end = "
+                + String.valueOf(getTaskEnd());
     }
 }

@@ -36,7 +36,11 @@ public class SubTask extends Task {
     @Override
     public String toString() {
         return "task.SubTask id = " + getTaskId() + " | name = '" + getTaskName() + "' | status = '" + getTaskStatus()
-                + " | start = " + taskStart + " | duration = " + getTaskDuration().toMinutes() + " minutes | end = "
-                + getTaskEnd() + "' | epicId = " + epicId;
+                + " | start = " + String.valueOf(taskStart) + " | duration = " + getTaskDuration().toMinutes() + " minutes | end = "
+                + String.valueOf(getTaskEnd()) + " | epicId = " + epicId;
+
+//        return super.toString() + " | epicId = " + epicId;
+//                  если сделать так, то придется усложнять отображение типа задачи в начале сообщения
+//                  (сейчас строка начинается с "task.SubTask", а если через super, то будет "task.Task")
     }
 }
