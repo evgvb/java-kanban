@@ -95,4 +95,95 @@ class InMemoryHistoryManagerTest {
 
         assertTrue(taskManager.getHistory().isEmpty());
     }
+
+    @Test
+    void testEmptyHistory() {
+        //Пустая история задач
+        List<Task> history = historyManager.getHistory();
+        assertTrue(history.isEmpty(), "История должна быть пустой при создании");
+    }
+
+    @Test
+    void testDuplicateAddition() {
+        //Дублирование
+        Task task = new Task("задача 1", "задача №1", TaskStatus.NEW);
+        task.setTaskId(1);
+
+        // Добавляем задачу дважды
+        historyManager.add(task);
+        historyManager.add(task);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size(), "Дубликаты не должны добавляться в историю");
+    }
+
+    //удаление
+    @Test
+    void testRemoveFromBeginning() {
+        //удаление первой задачи
+        Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
+        Task task2 = new Task("задача 2", "задача №2", TaskStatus.NEW);
+        Task task3 = new Task("задача 3", "задача №3", TaskStatus.NEW);
+
+        task1.setTaskId(1);
+        task2.setTaskId(2);
+        task3.setTaskId(3);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
+
+        historyManager.remove(1);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(2, history.size(), "Должно остаться 2 задачи");
+        assertEquals(2, history.get(0).getTaskId(), "Должна быть задача 2");
+        assertEquals(3, history.get(1).getTaskId(), "Должна быть задача 3");
+    }
+
+    @Test
+    void testRemoveFromMiddle() {
+        //удаление средней задачи
+        Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
+        Task task2 = new Task("задача 2", "задача №2", TaskStatus.NEW);
+        Task task3 = new Task("задача 3", "задача №3", TaskStatus.NEW);
+
+        task1.setTaskId(1);
+        task2.setTaskId(2);
+        task3.setTaskId(3);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
+
+        historyManager.remove(2);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(2, history.size(), "Должно остаться 2 задачи");
+        assertEquals(1, history.get(0).getTaskId(), "Должна быть задача 1");
+        assertEquals(3, history.get(1).getTaskId(), "Должна быть задача 3");
+    }
+
+    @Test
+    void testRemoveFromEnd() {
+        //удаление последней задачи
+        Task task1 = new Task("задача 1", "задача №1", TaskStatus.NEW);
+        Task task2 = new Task("задача 2", "задача №2", TaskStatus.NEW);
+        Task task3 = new Task("задача 3", "задача №3", TaskStatus.NEW);
+
+        task1.setTaskId(1);
+        task2.setTaskId(2);
+        task3.setTaskId(3);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
+
+        historyManager.remove(3);
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(2, history.size(), "Должно остаться 2 задачи");
+        assertEquals(1, history.get(0).getTaskId(), "Должна быть задача 1");
+        assertEquals(2, history.get(1).getTaskId(), "Должна быть задача 2");
+    }
 }

@@ -1,20 +1,24 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.InMemoryTaskManager;
 import service.TaskManager;
 import task.Epic;
 import task.SubTask;
 import task.Task;
 import util.TaskStatus;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
-    private TaskManager taskManager;
+public abstract class TaskManagerTest<T extends TaskManager> {
+    protected T taskManager;
+
+    protected abstract T createTaskManager();
 
     @BeforeEach
     void setUp() {
-        taskManager = new InMemoryTaskManager();
+        taskManager = createTaskManager();
     }
 
     @Test
@@ -33,9 +37,9 @@ class InMemoryTaskManagerTest {
         assertNotNull(addedSubTask, "Подзадача = null");
 
         //Проверка поиска по id
-        assertEquals(addedTask, taskManager.getTask(addedTask.getTaskId()));
-        assertEquals(addedEpic, taskManager.getEpic(addedEpic.getTaskId()));
-        assertEquals(addedSubTask, taskManager.getSubTask(addedSubTask.getTaskId()));
+        assertEquals(addedTask, taskManager.getTask(addedTask.getTaskId()),"Задача не найдена по id");
+        assertEquals(addedEpic, taskManager.getEpic(addedEpic.getTaskId()), "Основная задача не найдена по id");
+        assertEquals(addedSubTask, taskManager.getSubTask(addedSubTask.getTaskId()), "Подзадача не найдена по id");
     }
 
     @Test
@@ -81,5 +85,40 @@ class InMemoryTaskManagerTest {
         //assertEquals(originalId, addedTask.getTaskId());  //если id задан вручную и окажется не уникальным, то будет изменен
     }
 
+    @Test
+    void testSubTaskHasValidEpic() {
+        Epic epic = new Epic("основная задача 1", "основная задача №1");
+        Epic addedEpic = taskManager.addEpic(epic);
 
+        SubTask subTask = new SubTask("подзадача 1", "подзадача №1", TaskStatus.NEW, addedEpic.getTaskId());
+        SubTask addedSubTask = taskManager.addSubTask(subTask);
+
+        assertNotNull(taskManager.getEpic(addedSubTask.getEpicId()),
+                "Подзадача должена быть связана с основной задачей");
+    }
+
+    @Test
+    void testDeleteTask() {
+        Task task = new Task("задача 1", "задача №1", TaskStatus.NEW);
+        Task addedTask = taskManager.addTask(task);
+
+        taskManager.deleteTask(addedTask.getTaskId());
+
+        assertNull(taskManager.getTask(addedTask.getTaskId()), "Задача должна быть удалена");
+    }
+
+    @Test
+    void testTimeOverlapDetection() {
+        //проверка пересечения интервалов
+        LocalDateTime baseTime = LocalDateTime.now();
+
+        Task task1 = new Task("задача 1", "задача №1: продолжительность 60 минут", TaskStatus.NEW, baseTime, Duration.ofMinutes(60));
+        taskManager.addTask(task1);
+
+        // Задача, которая пересекается по времени
+        Task overlappingTask = new Task("задача 2", "задача №2: старт во время выполнеия задачи №1", TaskStatus.NEW,
+                baseTime.plusMinutes(30), Duration.ofMinutes(60));
+
+        assertThrows(IllegalArgumentException.class, () -> taskManager.addTask(overlappingTask),"Должно быть выброшено исключение при пересечении времени");
+    }
 }

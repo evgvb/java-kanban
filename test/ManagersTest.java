@@ -40,7 +40,5 @@ class ManagersTest {
         //создание менеджера
         HistoryManager historyManager = Managers.getDefaultHistory();
         assertNotNull(historyManager, "Менеджер истории = null!");
-
-
     }
 }
