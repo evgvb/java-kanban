@@ -149,5 +149,6 @@ class HttpTaskServerTest {
         assertEquals(200, response.statusCode(), "Некорректный код ответа");
         assertEquals(0, manager.getAllTasks().size(), "Задача должна быть удалена из менеджера");
         assertEquals(0, manager.getPrioritizedTasks().size(),"Задача должна быть удалена из приоритизированного списка");
+        assertEquals(0, manager.getHistory().size(), "Задача должна быть удалена из истории");
     }
 }
