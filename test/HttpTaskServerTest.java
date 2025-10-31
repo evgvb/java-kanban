@@ -131,10 +131,14 @@ class HttpTaskServerTest {
 
     @Test
     void testDeleteTask() throws IOException, InterruptedException {
-        Task task = new Task("задача 1", "задача №1", TaskStatus.NEW);
-        Task createdTask = manager.addTask(task);
+        Task taskToDelete = new Task("задача 1", "задача №1", TaskStatus.NEW,
+                LocalDateTime.now().plusHours(1), Duration.ofMinutes(30));
+        Task createdTask = manager.addTask(taskToDelete);
+        int taskId = createdTask.getTaskId();
 
-        URI url = URI.create("http://localhost:8080/tasks/" + createdTask.getTaskId());
+        assertEquals(1, manager.getAllTasks().size(), "Задача должна быть создана");
+
+        URI url = URI.create("http://localhost:8080/tasks/" + taskId);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(url)
                 .DELETE()
@@ -143,9 +147,7 @@ class HttpTaskServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertEquals(200, response.statusCode(), "Некорректный код ответа");
-
-        // Проверяем, что задача удалена
-        List<Task> tasks = manager.getAllTasks();
-        assertEquals(0, tasks.size(), "Задача не удалена");
+        assertEquals(0, manager.getAllTasks().size(), "Задача должна быть удалена из менеджера");
+        assertEquals(0, manager.getPrioritizedTasks().size(),"Задача должна быть удалена из приоритизированного списка");
     }
 }
