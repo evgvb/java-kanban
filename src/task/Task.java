@@ -14,6 +14,11 @@ public class Task {
     protected LocalDateTime taskStart;
     protected Duration taskDuration;
 
+    // Конструктор по умолчанию для Gson
+    public Task() {
+        this.taskStatus = TaskStatus.NEW;
+        this.taskDuration = Duration.ZERO;
+    }
 
     public Task(String taskName, String taskDescription, TaskStatus taskStatus) {
         this.taskName = taskName;

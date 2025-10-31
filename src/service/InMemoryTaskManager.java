@@ -78,9 +78,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int id) {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task);
+        if (task == null) {
+            throw new NotFoundException("Task with id " + id + " not found");
         }
+        historyManager.add(task);
         return task;
     }
 
@@ -145,9 +146,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpic(int id) {
         Epic epic = epics.get(id);
-        if (epic != null) {
-            historyManager.add(epic);
+        if (epic == null) {
+            throw new NotFoundException("Epic with id " + id + " not found");
         }
+        historyManager.add(epic);
         return epic;
     }
 
@@ -233,9 +235,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask getSubTask(int id) {
         SubTask subTask = subTasks.get(id);
-        if (subTask != null) {
-            historyManager.add(subTask);
+        if (subTask == null) {
+            throw new NotFoundException("SubTask with id " + id + " not found");
         }
+        historyManager.add(subTask);
         return subTask;
     }
 

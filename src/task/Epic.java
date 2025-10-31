@@ -10,6 +10,12 @@ public class Epic extends Task {
     private final ArrayList<Integer> subTaskIds;
     private LocalDateTime endTime;
 
+    // Конструктор по умолчанию для Gson
+    public Epic() {
+        super();
+        this.subTaskIds = new ArrayList<>();
+    }
+
     public Epic(String taskName, String taskDescription) {
         super(taskName, taskDescription, TaskStatus.NEW);
         this.subTaskIds = new ArrayList<>();
