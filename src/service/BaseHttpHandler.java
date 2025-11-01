@@ -25,8 +25,8 @@ public class BaseHttpHandler {
         sendText(exchange, text, 200);
     }
 
-    protected void sendSuccess(HttpExchange exchange) throws IOException {
-        sendText(exchange, "Задача создана", 201);
+    protected void sendSuccess(HttpExchange exchange, int taskId) throws IOException {
+        sendText(exchange, "Задача создана id: " + taskId, 201);
     }
 
     protected void sendNotFound(HttpExchange exchange) throws IOException {

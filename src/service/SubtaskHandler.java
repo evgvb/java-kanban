@@ -51,12 +51,10 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             try {
                 int id = Integer.parseInt(pathParts[2]);
                 SubTask subTask = taskManager.getSubTask(id);
-                if (subTask != null) {
-                    String response = gson.toJson(subTask);
-                    sendText(exchange, response);
-                } else {
-                    sendNotFound(exchange);
-                }
+
+                String response = gson.toJson(subTask);
+                sendText(exchange, response);
+
             } catch (NumberFormatException e) {
                 sendBadRequest(exchange, "Некорректный id");
             } catch (NotFoundException e) {
@@ -88,11 +86,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                 result = taskManager.updateSubTask(subTask);
             }
 
-            if (result != null) {
-                sendSuccess(exchange);
-            } else {
-                sendNotFound(exchange);
-            }
+            sendSuccess(exchange, result.getTaskId());
+
         } catch (JsonSyntaxException e) {
             sendBadRequest(exchange, "Некорректный формат: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -116,7 +111,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                 sendNotFound(exchange);
             }
         } else {
-            sendNotFound(exchange);
+            sendText(exchange, "Метод недопустим", 405);
         }
     }
 }

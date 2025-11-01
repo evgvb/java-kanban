@@ -51,12 +51,10 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             try {
                 int id = Integer.parseInt(pathParts[2]);
                 Epic epic = taskManager.getEpic(id);
-                if (epic != null) {
-                    String response = gson.toJson(epic);
-                    sendText(exchange, response);
-                } else {
-                    sendNotFound(exchange);
-                }
+
+                String response = gson.toJson(epic);
+                sendText(exchange, response);
+
             } catch (NumberFormatException e) {
                 sendBadRequest(exchange, "Некорректный id");
             } catch (NotFoundException e) {
@@ -66,12 +64,10 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             try {
                 int id = Integer.parseInt(pathParts[2]);
                 Epic epic = taskManager.getEpic(id);
-                if (epic != null) {
-                    String response = gson.toJson(taskManager.getSubTasksByEpic(id));
-                    sendText(exchange, response);
-                } else {
-                    sendNotFound(exchange);
-                }
+
+                String response = gson.toJson(taskManager.getSubTasksByEpic(id));
+                sendText(exchange, response);
+
             } catch (NumberFormatException e) {
                 sendBadRequest(exchange, "Некорректный id");
             } catch (NotFoundException e) {
@@ -103,7 +99,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             }
 
             if (result != null) {
-                sendSuccess(exchange);
+                sendSuccess(exchange, result.getTaskId());
             } else {
                 sendNotFound(exchange);
             }
@@ -122,7 +118,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 sendBadRequest(exchange, "Некорректный id");
             }
         } else {
-            sendNotFound(exchange);
+            sendText(exchange, "Метод недопустим", 405);
         }
     }
 }

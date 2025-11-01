@@ -93,11 +93,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 result = taskManager.updateTask(task);
             }
 
-            if (result != null) {
-                sendSuccess(exchange);
-            } else {
-                sendNotFound(exchange);
-            }
+            sendSuccess(exchange, result.getTaskId());
+
         } catch (JsonSyntaxException e) {
             sendBadRequest(exchange, "Некорректный формат: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -126,7 +123,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 sendNotFound(exchange);
             }
         } else {
-            sendNotFound(exchange);
+            sendText(exchange, "Метод недопустим", 405);
         }
     }
 }

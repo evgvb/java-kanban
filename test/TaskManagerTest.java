@@ -94,8 +94,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         SubTask subTask = new SubTask("подзадача 1", "подзадача №1", TaskStatus.NEW, addedEpic.getTaskId());
         SubTask addedSubTask = taskManager.addSubTask(subTask);
 
-        assertNotNull(taskManager.getEpic(addedSubTask.getEpicId()),
-                "Подзадача должена быть связана с основной задачей");
+        assertNotNull(taskManager.getEpic(addedSubTask.getEpicId()),"Подзадача должена быть связана с основной задачей");
     }
 
     @Test

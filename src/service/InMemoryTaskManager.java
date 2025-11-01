@@ -116,7 +116,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         removeFromPrioritizedTasks(task);
         historyManager.remove(id);
-
     }
 
     //task.Epic
@@ -185,7 +184,6 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(subtaskId);
         }
         historyManager.remove(id);
-
     }
 
     //task.SubTask
@@ -317,7 +315,6 @@ public class InMemoryTaskManager implements TaskManager {
 
         boolean allDone = epicSubTasks.stream().allMatch(subTask -> subTask.getTaskStatus() == TaskStatus.DONE);
         boolean allNew = epicSubTasks.stream().allMatch(subTask -> subTask.getTaskStatus() == TaskStatus.NEW);
-        ;
 
         if (allDone) {
             epic.setTaskStatus(TaskStatus.DONE);
