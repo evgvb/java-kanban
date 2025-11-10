@@ -8,6 +8,11 @@ import java.time.LocalDateTime;
 public class SubTask extends Task {
     private int epicId;
 
+    // Конструктор по умолчанию для Gson
+    public SubTask() {
+        super();
+    }
+
     public SubTask(String taskName, String taskDescription, TaskStatus taskStatus, int epicId) {
         super(taskName, taskDescription, taskStatus);
         this.epicId = epicId;
@@ -38,9 +43,5 @@ public class SubTask extends Task {
         return "task.SubTask id = " + getTaskId() + " | name = '" + getTaskName() + "' | status = '" + getTaskStatus()
                 + " | start = " + String.valueOf(taskStart) + " | duration = " + getTaskDuration().toMinutes() + " minutes | end = "
                 + String.valueOf(getTaskEnd()) + " | epicId = " + epicId;
-
-//        return super.toString() + " | epicId = " + epicId;
-//                  если сделать так, то придется усложнять отображение типа задачи в начале сообщения
-//                  (сейчас строка начинается с "task.SubTask", а если через super, то будет "task.Task")
     }
 }

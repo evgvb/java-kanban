@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.NotFoundException;
 import service.TaskManager;
 import task.Epic;
 import task.SubTask;
@@ -93,18 +94,20 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         SubTask subTask = new SubTask("подзадача 1", "подзадача №1", TaskStatus.NEW, addedEpic.getTaskId());
         SubTask addedSubTask = taskManager.addSubTask(subTask);
 
-        assertNotNull(taskManager.getEpic(addedSubTask.getEpicId()),
-                "Подзадача должена быть связана с основной задачей");
+        assertNotNull(taskManager.getEpic(addedSubTask.getEpicId()),"Подзадача должена быть связана с основной задачей");
     }
 
     @Test
     void testDeleteTask() {
         Task task = new Task("задача 1", "задача №1", TaskStatus.NEW);
         Task addedTask = taskManager.addTask(task);
+        int taskId = addedTask.getTaskId();
 
-        taskManager.deleteTask(addedTask.getTaskId());
+        taskManager.deleteTask(taskId);
 
-        assertNull(taskManager.getTask(addedTask.getTaskId()), "Задача должна быть удалена");
+        assertThrows(NotFoundException.class, () -> {
+            taskManager.getTask(taskId);
+        }, "После удаления должно быть исключение NotFoundException");
     }
 
     @Test
